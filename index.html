@@ -1,0 +1,95 @@
+<body>
+
+
+    <canvas id='canvas'> </canvas>
+    <script>
+        var balls = [];
+
+        window.onload = function () {
+            var canvas = document.getElementById('canvas');
+            canvas.width = 800;
+            canvas.height = 800;
+            var context = canvas.getContext('2d');
+
+            // context.globalAlpha = 0.1;
+
+            for (var i = 0; i < 40; i++) {
+                var R = Math.floor(Math.random() * 255);
+                var G = Math.floor(Math.random() * 255);
+                var B = Math.floor(Math.random() * 255);
+                var radius = Math.random() * 50 + 20
+                aBall = {
+                    color: `rgb(${R},${G},${B})`,
+                    radius: radius,
+                    x: Math.random() * (canvas.width - 2 * radius) + radius,
+                    y: Math.random() * (canvas.height - 2 * radius) + radius,
+                    vx: (Math.random() * 5 + 5) * Math.pow(-1, Math.floor(Math.random() * 100)),
+                    vy: (Math.random() * 5 + 5) * Math.pow(-1, Math.floor(Math.random() * 100)),
+                }
+                balls[i] = aBall;
+
+            }
+
+            setInterval(function () {
+                draw(context);
+                update(canvas.width, canvas.height);
+            }, 50)
+
+
+        }
+
+
+
+        function draw(context) {
+            var canvas = context.canvas;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            for (var i = 0; i < balls.length; i++) {
+                context.globalCompositeOperation='lighter';
+                // context.globalCompositeOperation='source-over | copy | destination-in | destination-out | destination-over | lighter | source-atop | source-in | source-out | xor';
+                context.fillStyle = balls[i].color;
+                context.beginPath();
+                context.arc(balls[i].x, balls[i].y, balls[i].radius, 0, Math.PI * 2);
+                context.closePath();
+                context.fill();
+            }
+        }
+
+        function update(canvasWidth, canvasHeight) {
+            for (var i = 0; i < balls.length; i++) {
+                balls[i].x += balls[i].vx;
+                balls[i].y += balls[i].vy;
+                if (balls[i].x - balls[i].radius <= 0) {
+                    balls[i].vx = -balls[i].vx;
+                    balls[i].x = balls[i].radius;
+                }
+                if (balls[i].x + balls[i].radius > canvasWidth) {
+                    balls[i].vx = -balls[i].vx;
+                    balls[i].x = canvasWidth - balls[i].radius;
+                }
+                if (balls[i].y - balls[i].radius <= 0) {
+                    balls[i].vy = -balls[i].vy;
+                    balls[i].y = balls[i].radius;
+                }
+                if (balls[i].y + balls[i].radius > canvasHeight) {
+                    balls[i].vy = -balls[i].vy;
+                    balls[i].y = canvasHeight - balls[i].radius;
+                }
+            }
+        }
+
+
+        // FizzBuzz
+        for (var i = 1; i <= 20; i++) {
+            if (i % 15 == 0)
+                console.log("FizzBuzz");
+            else if (i % 3 == 0)
+                console.log("Fizz");
+            else if (i % 5 == 0)
+                console.log("Buzz");
+            else
+                console.log(i);
+        }
+    </script>
+    <section>
+    </section>
+</body>
